@@ -1,0 +1,89 @@
+    <!DOCTYPE html>
+    {% load static %}
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{%static 'css/style.css'%}">
+        <link rel="icon" href="{%static 'css/icon.png'%}">
+        <title>Searched - {{ query }}</title>
+    </head>
+
+    <body class="res">
+        <div class="cent"><img class="logo" src="{%static 'css/icon.png'%}" alt="SPI-WEB icon">
+            <h2 class="appname">SPI-WEB</h2></div>
+        
+        <form class="f1" method="POST" action="{% url 'crawl'%}">
+            {% csrf_token %}
+            <input class="in" id="s-i" type="search" name="url" placeholder="Search Here..." onfocus="clearPlaceholder()"
+                onblur="restorePlaceholder()" autocomplete="off" onkeypress="keysound()">
+            <button type="submit" class="search-button" onmousedown="mousesound()">
+                <div class="s_icon"><strong>Search</strong></div>
+            </button>
+        </form>
+        <div class="bord"></div>
+        <div class="sr">
+            <h1>Search Result for <em class="query"> "{{ query }}" </em> </h1>
+        </div>
+        <div class="grid-con">
+            <div class="result">
+                {% for item in items %}
+                <div class="sp1"></div>
+                <div class="container">
+                    <div class="title"><a href="{{ item.link }}" style="color: rgba(255, 59, 59, 0.897);">{{ item.title }}</a></div>
+                    <div class="link_con"><a class="link" href="{{ item.link }}">{{ item.link }}</a></div>
+                    <div class="par">
+                        <p>{{ item.snippet }}</p>
+                    </div>
+                </div>
+                <div class="sp2"></div>
+                {% endfor %}
+            </div>
+            <div class="con">
+                <div class="sp3"></div>
+                <div class="ab">
+                    <h2 class="about">About:</h2>
+                    <p>{{ about }}</p>
+                </div>
+            </div>         
+        </div>
+
+        
+        <div class="btn4">
+            <button type="button" class="home-button" onmousedown="mousesound()"><a href="{% url 'crawl'%}"><strong>Home</strong></a></button>
+        </div>
+        
+        <script>
+            function mousesound(){
+                var snd = new Audio("{%static 'css/mouseclick.wav'%}");
+                snd.play()
+            }
+            function keysound(){
+                var snd = new Audio("{%static 'css/keyboard.wav'%}");
+                snd.play()
+            }
+        </script>
+
+        <script>
+            var Result = '{{ query }}';
+            window.history.replaceState(null, null, Result);
+        </script>
+
+        <script>
+            var input = document.getElementById("s-i");
+            var phText = input.getAttribute("placeholder");
+            function clearPlaceholder() {
+                input.setAttribute("placeholder", "");
+            }
+
+            function restorePlaceholder() {
+                input.setAttribute("placeholder", phText);
+            }
+        </script>
+
+
+    </body>
+
+    </html>
